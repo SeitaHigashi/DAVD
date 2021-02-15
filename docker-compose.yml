@@ -1,0 +1,6 @@
+version: '2'
+services: 
+  davd:
+    build: .
+    container_name: DAVD
+    tty: true
