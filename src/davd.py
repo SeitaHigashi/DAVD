@@ -27,12 +27,11 @@ async def on_message(message):
         await download(links, message)
 
 async def download(links, message):
+    await message.add_reaction('🌑')
     for link in links:
-        await message.channel.send("Download starting... :"+link)
         with ydl:
-#            result = ydl.extract_info(link, download=True)
            ydl.extract_info(link, download=True)
-        await message.channel.send("Download complete :"+link)
-
+    await message.remove_reaction('🌑', client.user)
+    await message.add_reaction('🌕')
 client.run(config['DISCORD']['token'])
 
