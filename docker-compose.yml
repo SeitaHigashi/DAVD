@@ -3,4 +3,8 @@ services:
   davd:
     build: .
     container_name: DAVD
+    volumes:
+      - ./video:/video
+      - ./config:/config
+      - ./src:/src
     tty: true
