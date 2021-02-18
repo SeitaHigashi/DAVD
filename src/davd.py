@@ -4,13 +4,13 @@ import youtube_dl
 import discord
 import configparser
 
-ydl = youtube_dl.YoutubeDL({
-        'format' : 'bestvideo+bestaudio',
-        'outtmpl': '/video/%(title)s'
-    })
-client = discord.Client()
 config = configparser.ConfigParser()
 config.read('/config/setting.ini')
+ydl = youtube_dl.YoutubeDL({
+        'format' : 'bestvideo+bestaudio',
+        'outtmpl': config['DOWNLOAD']['download_path']+str('/%(title)s')
+    })
+client = discord.Client()
 
 
 @client.event
@@ -27,11 +27,13 @@ async def on_message(message):
         await download(links, message)
 
 async def download(links, message):
-    await message.add_reaction('🌑')
-    for link in links:
+    reactions = ['🌑', '🌒', '🌓', '🌔', '🌕']
+    await message.add_reaction(reactions[0])
+    for index in range(len(links)):
         with ydl:
-           ydl.extract_info(link, download=True)
-    await message.remove_reaction('🌑', client.user)
-    await message.add_reaction('🌕')
+           ydl.extract_info(links[index], download=True)
+        await message.remove_reaction(reactions[int(index/len(links)*(len(reactions)-1))], client.user)
+        await message.add_reaction(reactions[int((index+1)/len(links)*(len(reactions)-1))])
+
 client.run(config['DISCORD']['token'])
 
