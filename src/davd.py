@@ -4,13 +4,13 @@ import youtube_dl
 import discord
 import configparser
 
-ydl = youtube_dl.YoutubeDL({
-        'format' : 'bestvideo+bestaudio',
-        'outtmpl': '/video/%(title)s'
-    })
-client = discord.Client()
 config = configparser.ConfigParser()
 config.read('/config/setting.ini')
+ydl = youtube_dl.YoutubeDL({
+        'format' : 'bestvideo+bestaudio',
+        'outtmpl': config['DOWNLOAD']['download_path']+str('/%(title)s')
+    })
+client = discord.Client()
 
 
 @client.event
